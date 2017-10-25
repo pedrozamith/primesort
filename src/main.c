@@ -7,11 +7,33 @@
 
 #include <stdio.h>
 
-int main() {
+#define MAXSTRS 7
 
-  int x, y;
+int main(void)
+{
+        int  cntr;
+        FILE *pipe_fp;
+        int *strings[MAXSTRS];
+        
+        for(cntr=0; cntr<MAXSTRS; cntr++) {
+	  scanf("%d", &strings[cntr]);
+	}
+	
+        /* Create one way pipe line with call to popen() */
+        if (( pipe_fp = popen("sort", "w")) == NULL)
+        {
+                perror("popen");
+                exit(1);
+        }
 
-  scanf("%d %d\n", &x, &y);
-  printf("%d\n", x + 200);
-  return 0;
+        /* Processing loop */
+        for(cntr=0; cntr<MAXSTRS; cntr++) {
+		fprintf(pipe_fp, "%d", strings[cntr]);
+                fputc('\n', pipe_fp);
+        }
+
+        /* Close the pipe */
+        pclose(pipe_fp);
+        
+        return(0);
 }
