@@ -6,34 +6,64 @@
  */
 
 #include <stdio.h>
+#include <math.h>
 
-#define MAXSTRS 7
+#define MAXSTRS 20000
 
 int main(void)
 {
-        int  cntr;
-        FILE *pipe_fp;
-        int *strings[MAXSTRS];
+        int  cntr,j;
+        int *ints[MAXSTRS];
         
-        for(cntr=0; cntr<MAXSTRS; cntr++) {
-	  scanf("%d", &strings[cntr]);
-	}
+        for(cntr=0; cntr<MAXSTRS; cntr++)
+		{
+	  		scanf("%d", &ints[cntr]);
+	  		if (ints[cntr] == -1)
+	  			break;
+		}
 	
-        /* Create one way pipe line with call to popen() */
-        if (( pipe_fp = popen("sort", "w")) == NULL)
-        {
-                perror("popen");
-                exit(1);
+		BubbleSort(ints, cntr);
+		VerificaPrimo(ints, cntr);
+}
+
+void BubbleSort(int vetor[], int tam) {
+	int fim, i;
+	
+    for (fim = tam-1; fim > 0; --fim) {
+
+        for ( i = 0; i < fim; ++i) {
+
+            if (vetor[i] < vetor[i+1]) {
+
+                int aux = vetor[i];
+
+                vetor[i] = vetor[i+1];
+
+                vetor[i+1] = aux;
+
+            }
+
         }
 
-        /* Processing loop */
-        for(cntr=0; cntr<MAXSTRS; cntr++) {
-		fprintf(pipe_fp, "%d", strings[cntr]);
-                fputc('\n', pipe_fp);
-        }
+    }
 
-        /* Close the pipe */
-        pclose(pipe_fp);
-        
-        return(0);
+}
+
+void VerificaPrimo(int vetor[], int tam){
+	int i,j,aux,div =0;
+	
+    for (i=0; i<tam; i++) {
+    	if (vetor[i] == 1)
+    		printf("%d\n", vetor[i]);
+		aux = (sqrt(vetor[i]));
+		for (j=1; j<=aux ;j++){
+    		if(vetor[i] % j == 0){
+    			div++;
+    		}
+    	}
+    	if (div >= 2){
+    		printf("%d\n", vetor[i]);
+    	}
+    	div = 0;
+	}
 }
